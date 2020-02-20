@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_tts/flutter_tts.dart';
 import 'package:blindreader1/insection.dart';
 import 'package:blindreader1/provider.dart';
+import 'package:flutter_tts/flutter_tts.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 bool speechStateListening = true;
+PermissionStatus microphonePermission;
+FlutterTts flutterTts;
 
 speechState() {
   if (speechStateListening == true)
     return 'Listening...';
   else
     return '';
+}
+
+checkPermission() async {
+  microphonePermission = await PermissionHandler()
+      .checkPermissionStatus(PermissionGroup.microphone);
 }
 
 Future<String> getImage(List quakeList, int position) async {
@@ -31,13 +39,13 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  FlutterTts flutterTts = FlutterTts();
-
   @override
   initState() {
     super.initState();
+    flutterTts = FlutterTts();
     flutterTts.setVoice('en-us-x-sfg#male_1-local');
     flutterTts.setVolume(1.0);
+    checkPermission();
   }
 
   _getTileValue(List quakeList, int index) async {
@@ -82,7 +90,7 @@ class HomePageState extends State<HomePage> {
             padding: EdgeInsets.only(right: 5.0),
             child: Icon(
               Icons.mic_none,
-              color: Colors.white,
+              // color: Colors.white,
             ),
           ),
           Center(
@@ -107,13 +115,15 @@ class HomePageState extends State<HomePage> {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(
-                    top: 10.0,
+                    top: 20.0,
                     left: 20.0,
                   ),
                   child: Text(
                     'Educational',
-                    style:
-                        TextStyle(fontWeight: FontWeight.w600, fontSize: 20.0),
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20.0,
+                    ),
                   ),
                 ),
                 Container(
@@ -384,19 +394,20 @@ class HomePageState extends State<HomePage> {
               ],
             );
           } else {
-            return Container();
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           }
         },
       ),
       floatingActionButton: GestureDetector(
-        onLongPress: () {},
-        child: FloatingActionButton.extended(
-          onPressed: () {
-            flutterTts.speak('Voice Search');
-          },
-          label: Text('Voice Search'),
-          icon: Icon(Icons.mic_none),
-        ),
+        onLongPress: () async {
+          if (microphonePermission != PermissionStatus.granted)
+            PermissionHandler()
+                .requestPermissions([PermissionGroup.microphone]);
+          else {}
+        },
+        child: floatingSpeechButton,
       ),
     );
   }

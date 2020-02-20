@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
 
 import 'package:blindreader1/HomePage.dart';
@@ -16,6 +17,12 @@ class SplashPageState extends State<SplashPage> {
   @override
   initState() {
     super.initState();
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+      ),
+    );
     Timer(Duration(seconds: 2), handleTimeout);
   }
 

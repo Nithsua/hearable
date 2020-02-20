@@ -25,6 +25,7 @@ dependencies:
   firebase_core: ^0.4.0+9
   firebase_analytics: ^5.0.6
   page_transition: "^1.1.5"
+  permission_handler: "^4.2.0+hotfix.3"
   # transparent_image: 1.0.0
 
   # The following adds the Cupertino Icons font to your application.

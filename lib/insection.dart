@@ -31,7 +31,7 @@ class ChapterSectionState extends State<ChapterSection> {
         // backgroundColor: Colors.white,
         title: Text(
           'Blind Reader',
-          style: TextStyle(color: Colors.black),
+          // style: TextStyle(color: Colors.black),
         ),
         centerTitle: true,
       ),
