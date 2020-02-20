@@ -30,12 +30,3 @@ class FirebaseStorageService extends ChangeNotifier {
     return jsonDecode(response.body);
   }
 }
-
-Widget floatingSpeechButton = FloatingActionButton.extended(
-  onPressed: () {
-    flutterTts = FlutterTts();
-    flutterTts.speak('Voice Search');
-  },
-  label: Text('Voice Search'),
-  icon: Icon(Icons.mic_none),
-);
