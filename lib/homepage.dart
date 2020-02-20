@@ -400,15 +400,6 @@ class HomePageState extends State<HomePage> {
           }
         },
       ),
-      floatingActionButton: GestureDetector(
-        onLongPress: () async {
-          if (microphonePermission != PermissionStatus.granted)
-            PermissionHandler()
-                .requestPermissions([PermissionGroup.microphone]);
-          else {}
-        },
-        child: floatingSpeechButton,
-      ),
     );
   }
 }
