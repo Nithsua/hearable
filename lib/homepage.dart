@@ -1,19 +1,18 @@
+import 'package:blindreader1/searchpage.dart';
 import 'package:flutter/material.dart';
 import 'package:blindreader1/insection.dart';
 import 'package:blindreader1/provider.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:speech_recognition/speech_recognition.dart';
 
-bool speechStateListening = true;
+SpeechRecognition _speechRecognition;
+bool _speechRecognitionAvailable = false;
+bool _isListening = false;
+
 PermissionStatus microphonePermission;
 FlutterTts flutterTts;
-
-speechState() {
-  if (speechStateListening == true)
-    return 'Listening...';
-  else
-    return '';
-}
+String speechState = '';
 
 checkPermission() async {
   microphonePermission = await PermissionHandler()
@@ -46,6 +45,7 @@ class HomePageState extends State<HomePage> {
     flutterTts.setVoice('en-us-x-sfg#male_1-local');
     flutterTts.setVolume(1.0);
     checkPermission();
+    activateSpeechRecognizer();
   }
 
   _getTileValue(List quakeList, int index) async {
@@ -74,31 +74,75 @@ class HomePageState extends State<HomePage> {
     return temp;
   }
 
+  void activateSpeechRecognizer() {
+    _speechRecognition = new SpeechRecognition();
+    _speechRecognition.setAvailabilityHandler(onSpeechAvailability);
+    _speechRecognition.setCurrentLocaleHandler(onCurrentLocale);
+    _speechRecognition.setRecognitionStartedHandler(onRecognitionStarted);
+    _speechRecognition.setRecognitionResultHandler(onRecognitionResult);
+    _speechRecognition.setRecognitionCompleteHandler(onRecognitionComplete);
+    _speechRecognition
+        .activate()
+        .then((res) => setState(() => _speechRecognitionAvailable = res));
+  }
+
+  void start() => _speechRecognition.listen(locale: 'en_US').then((result) {
+        print('Started listening => result $result');
+      });
+
+  void cancel() => _speechRecognition
+      .cancel()
+      .then((result) => setState(() => _isListening = result));
+
+  void stop() => _speechRecognition.stop().then((result) {
+        setState(() {
+          // speechState = '';
+          _isListening = result;
+        });
+      });
+
+  void onSpeechAvailability(bool result) =>
+      setState(() => _speechRecognitionAvailable = result);
+
+  void onCurrentLocale(String locale) =>
+      setState(() => print("current locale: $locale"));
+
+  void onRecognitionStarted() => setState(() => _isListening = true);
+
+  void onRecognitionResult(String text) {
+    setState(() {
+      speechState = text;
+      stop();
+    });
+  }
+
+  void onRecognitionComplete() {
+    setState(() {
+      _isListening = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
           'Blind Reader',
-          style: TextStyle(
-              // color: Colors.black,
-              // fontWeight: FontWeight.bold,
-              ),
+          style: TextStyle(),
         ),
         actions: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(right: 5.0),
-            child: Icon(
-              Icons.mic_none,
-              // color: Colors.white,
-            ),
-          ),
           Center(
             child: Padding(
               padding: EdgeInsets.only(right: 5.0),
               child: Text(
-                speechState(),
+                speechState,
               ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: 5.0),
+            child: Icon(
+              Icons.mic_none,
             ),
           ),
         ],
@@ -119,7 +163,7 @@ class HomePageState extends State<HomePage> {
                     left: 20.0,
                   ),
                   child: Text(
-                    'Educational',
+                    'Programming',
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 20.0,
@@ -145,27 +189,52 @@ class HomePageState extends State<HomePage> {
                               filterCategory(quakeList, 'Programming'),
                               position),
                           builder: (context, snap) {
-                            var temp = snap.data;
                             if (snap.hasData) {
+                              var temp = snap.data;
+
                               return Padding(
                                 padding: EdgeInsets.all(5.0),
                                 child: Card(
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(5.0),
-                                    child: Image.network(
-                                      temp['imageurl'],
-                                      loadingBuilder:
-                                          (context, child, loadingProgress) {
-                                        if (loadingProgress == null)
-                                          return child;
-                                        return Container(
-                                          width: 80,
-                                        );
-                                      },
-                                      width: 80,
+                                  child: InkWell(
+                                    onLongPress: () {
+                                      flutterTts
+                                          .speak('Opening ' + temp['title']);
+                                      Navigator.push(
+                                        context,
+                                        // PageTransition(
+                                        //     child: ChapterSection(
+                                        //       temp['chapters'],
+                                        //     ),
+                                        //     type: PageTransitionType.rightToLeftWithFade),
+                                        MaterialPageRoute(
+                                          builder: (context) => ChapterSection(
+                                            temp['chapters'],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    onTap: () {
+                                      print(temp['title']);
+                                      flutterTts.speak(temp['title']);
+                                    },
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(5.0),
+                                      child: Image.network(
+                                        temp['imageurl'],
+                                        loadingBuilder:
+                                            (context, child, loadingProgress) {
+                                          if (loadingProgress == null)
+                                            return child;
+                                          return Container(
+                                            width: 80,
+                                          );
+                                        },
+                                        width: 80,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -185,7 +254,7 @@ class HomePageState extends State<HomePage> {
                     left: 20.0,
                   ),
                   child: Text(
-                    'Literature',
+                    'Theories',
                     style:
                         TextStyle(fontWeight: FontWeight.w600, fontSize: 20.0),
                   ),
@@ -198,7 +267,7 @@ class HomePageState extends State<HomePage> {
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
-                      itemCount: findCategoryLength(quakeList, 'Programming'),
+                      itemCount: findCategoryLength(quakeList, 'Theories'),
                       itemBuilder: (context, position) {
                         // var cardTemp = _getTileValue(
                         //     filterCategory(quakeList, 'Programming'), position);
@@ -206,30 +275,54 @@ class HomePageState extends State<HomePage> {
                         // print(findCategoryLength(quakeList, 'Programming'));
                         return FutureBuilder(
                           future: _getTileValue(
-                              filterCategory(quakeList, 'Programming'),
-                              position),
+                              filterCategory(quakeList, 'Theories'), position),
                           builder: (context, snap) {
-                            var temp = snap.data;
                             if (snap.hasData) {
+                              var temp = snap.data;
+
                               return Padding(
                                 padding: EdgeInsets.all(5.0),
                                 child: Card(
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(5.0),
-                                    child: Image.network(
-                                      temp['imageurl'],
-                                      loadingBuilder:
-                                          (context, child, loadingProgress) {
-                                        if (loadingProgress == null)
-                                          return child;
-                                        return Container(
-                                          width: 80,
-                                        );
-                                      },
-                                      width: 80,
+                                  child: InkWell(
+                                    onLongPress: () {
+                                      flutterTts
+                                          .speak('Opening ' + temp['title']);
+                                      Navigator.push(
+                                        context,
+                                        // PageTransition(
+                                        //     child: ChapterSection(
+                                        //       temp['chapters'],
+                                        //     ),
+                                        //     type: PageTransitionType.rightToLeftWithFade),
+                                        MaterialPageRoute(
+                                          builder: (context) => ChapterSection(
+                                            temp['chapters'],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    onTap: () {
+                                      print(temp['title']);
+                                      flutterTts.speak(temp['title']);
+                                    },
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(5.0),
+                                      child: Image.network(
+                                        temp['imageurl'],
+                                        loadingBuilder:
+                                            (context, child, loadingProgress) {
+                                          if (loadingProgress == null)
+                                            return child;
+                                          return Container(
+                                            width: 80,
+                                          );
+                                        },
+                                        width: 80,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -259,12 +352,13 @@ class HomePageState extends State<HomePage> {
                   child: Center(
                     child: ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: quakeList.length,
+                      itemCount: findCategoryLength(quakeList, 'Popular'),
                       shrinkWrap: true,
                       itemBuilder: (context, position) {
                         // Future<String> temp = getImage(position);
                         return FutureBuilder(
-                          future: _getTileValue(quakeList, position),
+                          future: _getTileValue(
+                              filterCategory(quakeList, 'Popular'), position),
                           builder: (context, snap) {
                             if (snap.connectionState ==
                                 ConnectionState.waiting) {
@@ -405,9 +499,30 @@ class HomePageState extends State<HomePage> {
           if (microphonePermission != PermissionStatus.granted)
             PermissionHandler()
                 .requestPermissions([PermissionGroup.microphone]);
-          else {}
+          else {
+            if ((_isListening == false) &&
+                (_speechRecognitionAvailable == true)) {
+              start();
+              // if (_isListening == false)
+              //   Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (context) => SearchPage(speechState),
+              //     ),
+              //   );
+            }
+          }
         },
-        child: floatingSpeechButton,
+        child: FloatingActionButton.extended(
+          onPressed: () {
+            flutterTts = FlutterTts();
+            flutterTts.speak('Voice Search');
+            // print(speechStateListening);
+            // print(speechStateListening);
+          },
+          label: Text('Voice Search'),
+          icon: Icon(Icons.mic_none),
+        ),
       ),
     );
   }

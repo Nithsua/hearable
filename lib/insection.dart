@@ -33,7 +33,7 @@ class ChapterSectionState extends State<ChapterSection> {
           'Blind Reader',
           // style: TextStyle(color: Colors.black),
         ),
-        centerTitle: true,
+        // centerTitle: true,
       ),
       body: ListView.builder(
         itemCount: subSection.length,

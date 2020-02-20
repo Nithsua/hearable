@@ -46,7 +46,7 @@ class ReaderPageState extends State<ReaderPage> {
           'Blind Reader',
           // style: TextStyle(color: Colors.black),
         ),
-        centerTitle: true,
+        // centerTitle: true,
       ),
       body: Stack(
         alignment: Alignment.bottomCenter,
