@@ -1,6 +1,5 @@
-# blindreader1
-
-A new Flutter project.
+# blindreader
+Basic Implementation of Ebook Reader in flutter for visually impaired
 
 ## Getting Started
 
