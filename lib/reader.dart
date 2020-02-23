@@ -37,6 +37,12 @@ class ReaderPageState extends State<ReaderPage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    flutterTts.stop();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

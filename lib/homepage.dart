@@ -2,23 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:blindreader1/insection.dart';
 import 'package:blindreader1/provider.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:permission_handler/permission_handler.dart';
 
-bool speechStateListening = true;
-PermissionStatus microphonePermission;
 FlutterTts flutterTts;
-
-speechState() {
-  if (speechStateListening == true)
-    return 'Listening...';
-  else
-    return '';
-}
-
-checkPermission() async {
-  microphonePermission = await PermissionHandler()
-      .checkPermissionStatus(PermissionGroup.microphone);
-}
 
 Future<String> getImage(List quakeList, int position) async {
   return await FirebaseStorageService.getResource(
@@ -45,7 +30,12 @@ class HomePageState extends State<HomePage> {
     flutterTts = FlutterTts();
     flutterTts.setVoice('en-us-x-sfg#male_1-local');
     flutterTts.setVolume(1.0);
-    checkPermission();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    flutterTts.stop();
   }
 
   _getTileValue(List quakeList, int index) async {
@@ -85,23 +75,6 @@ class HomePageState extends State<HomePage> {
               // fontWeight: FontWeight.bold,
               ),
         ),
-        actions: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(right: 5.0),
-            child: Icon(
-              Icons.mic_none,
-              // color: Colors.white,
-            ),
-          ),
-          Center(
-            child: Padding(
-              padding: EdgeInsets.only(right: 5.0),
-              child: Text(
-                speechState(),
-              ),
-            ),
-          ),
-        ],
         // centerTitle: true,
       ),
       body: FutureBuilder(
@@ -119,7 +92,7 @@ class HomePageState extends State<HomePage> {
                     left: 20.0,
                   ),
                   child: Text(
-                    'Educational',
+                    'Programming',
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 20.0,
@@ -185,7 +158,7 @@ class HomePageState extends State<HomePage> {
                     left: 20.0,
                   ),
                   child: Text(
-                    'Literature',
+                    'Theories',
                     style:
                         TextStyle(fontWeight: FontWeight.w600, fontSize: 20.0),
                   ),
@@ -198,7 +171,7 @@ class HomePageState extends State<HomePage> {
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
-                      itemCount: findCategoryLength(quakeList, 'Programming'),
+                      itemCount: findCategoryLength(quakeList, 'Theories'),
                       itemBuilder: (context, position) {
                         // var cardTemp = _getTileValue(
                         //     filterCategory(quakeList, 'Programming'), position);
@@ -206,8 +179,7 @@ class HomePageState extends State<HomePage> {
                         // print(findCategoryLength(quakeList, 'Programming'));
                         return FutureBuilder(
                           future: _getTileValue(
-                              filterCategory(quakeList, 'Programming'),
-                              position),
+                              filterCategory(quakeList, 'Theories'), position),
                           builder: (context, snap) {
                             var temp = snap.data;
                             if (snap.hasData) {
@@ -259,12 +231,13 @@ class HomePageState extends State<HomePage> {
                   child: Center(
                     child: ListView.builder(
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: quakeList.length,
+                      itemCount: findCategoryLength(quakeList, 'Popular'),
                       shrinkWrap: true,
                       itemBuilder: (context, position) {
                         // Future<String> temp = getImage(position);
                         return FutureBuilder(
-                          future: _getTileValue(quakeList, position),
+                          future: _getTileValue(
+                              filterCategory(quakeList, 'Popular'), position),
                           builder: (context, snap) {
                             if (snap.connectionState ==
                                 ConnectionState.waiting) {

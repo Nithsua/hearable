@@ -24,6 +24,12 @@ class ChapterSectionState extends State<ChapterSection> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    flutterTts.stop();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
