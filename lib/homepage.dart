@@ -118,27 +118,52 @@ class HomePageState extends State<HomePage> {
                               filterCategory(quakeList, 'Programming'),
                               position),
                           builder: (context, snap) {
-                            var temp = snap.data;
                             if (snap.hasData) {
+                              var temp = snap.data;
+
                               return Padding(
                                 padding: EdgeInsets.all(5.0),
                                 child: Card(
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(5.0),
-                                    child: Image.network(
-                                      temp['imageurl'],
-                                      loadingBuilder:
-                                          (context, child, loadingProgress) {
-                                        if (loadingProgress == null)
-                                          return child;
-                                        return Container(
-                                          width: 80,
-                                        );
-                                      },
-                                      width: 80,
+                                  child: InkWell(
+                                    onLongPress: () {
+                                      flutterTts
+                                          .speak('Opening ' + temp['title']);
+                                      Navigator.push(
+                                        context,
+                                        // PageTransition(
+                                        //     child: ChapterSection(
+                                        //       temp['chapters'],
+                                        //     ),
+                                        //     type: PageTransitionType.rightToLeftWithFade),
+                                        MaterialPageRoute(
+                                          builder: (context) => ChapterSection(
+                                            temp['chapters'],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    onTap: () {
+                                      print(temp['title']);
+                                      flutterTts.speak(temp['title']);
+                                    },
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(5.0),
+                                      child: Image.network(
+                                        temp['imageurl'],
+                                        loadingBuilder:
+                                            (context, child, loadingProgress) {
+                                          if (loadingProgress == null)
+                                            return child;
+                                          return Container(
+                                            width: 80,
+                                          );
+                                        },
+                                        width: 80,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -181,27 +206,52 @@ class HomePageState extends State<HomePage> {
                           future: _getTileValue(
                               filterCategory(quakeList, 'Theories'), position),
                           builder: (context, snap) {
-                            var temp = snap.data;
                             if (snap.hasData) {
+                              var temp = snap.data;
+
                               return Padding(
                                 padding: EdgeInsets.all(5.0),
                                 child: Card(
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(5.0),
-                                    child: Image.network(
-                                      temp['imageurl'],
-                                      loadingBuilder:
-                                          (context, child, loadingProgress) {
-                                        if (loadingProgress == null)
-                                          return child;
-                                        return Container(
-                                          width: 80,
-                                        );
-                                      },
-                                      width: 80,
+                                  child: InkWell(
+                                    onLongPress: () {
+                                      flutterTts
+                                          .speak('Opening ' + temp['title']);
+                                      Navigator.push(
+                                        context,
+                                        // PageTransition(
+                                        //     child: ChapterSection(
+                                        //       temp['chapters'],
+                                        //     ),
+                                        //     type: PageTransitionType.rightToLeftWithFade),
+                                        MaterialPageRoute(
+                                          builder: (context) => ChapterSection(
+                                            temp['chapters'],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    onTap: () {
+                                      print(temp['title']);
+                                      flutterTts.speak(temp['title']);
+                                    },
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(5.0),
+                                      child: Image.network(
+                                        temp['imageurl'],
+                                        loadingBuilder:
+                                            (context, child, loadingProgress) {
+                                          if (loadingProgress == null)
+                                            return child;
+                                          return Container(
+                                            width: 80,
+                                          );
+                                        },
+                                        width: 80,
+                                      ),
                                     ),
                                   ),
                                 ),
