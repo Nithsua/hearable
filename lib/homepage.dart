@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:blindreader1/insection.dart';
 import 'package:blindreader1/provider.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
 FlutterTts flutterTts;
@@ -27,6 +28,12 @@ class HomePageState extends State<HomePage> {
   @override
   initState() {
     super.initState();
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Colors.blue,
+        // statusBarIconBrightness: Brightness.dark,
+      ),
+    );
     flutterTts = FlutterTts();
     flutterTts.setVoice('en-us-x-sfg#male_1-local');
     flutterTts.setVolume(1.0);
@@ -88,8 +95,8 @@ class HomePageState extends State<HomePage> {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(
-                    top: 20.0,
-                    left: 20.0,
+                    top: 10.0,
+                    left: 10.0,
                   ),
                   child: Text(
                     'Programming',
@@ -100,7 +107,7 @@ class HomePageState extends State<HomePage> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0.0),
+                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
                   height: 170,
                   // width: 75,
                   child: Center(
@@ -180,7 +187,7 @@ class HomePageState extends State<HomePage> {
                 Padding(
                   padding: EdgeInsets.only(
                     top: 10.0,
-                    left: 20.0,
+                    left: 10.0,
                   ),
                   child: Text(
                     'Theories',
@@ -189,7 +196,7 @@ class HomePageState extends State<HomePage> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0.0),
+                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
                   height: 170,
                   // width: 75,
                   child: Center(
@@ -268,7 +275,7 @@ class HomePageState extends State<HomePage> {
                 Padding(
                   padding: EdgeInsets.only(
                     top: 10.0,
-                    left: 20.0,
+                    left: 10.0,
                   ),
                   child: Text(
                     'Popular Ones',
@@ -277,7 +284,7 @@ class HomePageState extends State<HomePage> {
                   ),
                 ),
                 Container(
-                  padding: EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 20.0),
+                  padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 10.0),
                   child: Center(
                     child: ListView.builder(
                       physics: NeverScrollableScrollPhysics(),

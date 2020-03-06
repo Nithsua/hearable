@@ -1,18 +1,12 @@
-import 'package:blindreader1/splash.dart';
+import 'package:blindreader1/homepage.dart';
+// import 'package:blindreader1/splash.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 // import 'package:flutter/services.dart';
 // import 'package:page_transition/page_transition.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(
-      statusBarColor: Colors.blue,
-      // statusBarIconBrightness: Brightness.dark,
-    ),
-  );
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -45,7 +39,7 @@ void main() async {
           // ),
           // ),
           ),
-      home: SplashPage(),
+      home: HomePage(),
     ),
   );
 }
