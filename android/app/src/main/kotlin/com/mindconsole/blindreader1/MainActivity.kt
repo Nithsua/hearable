@@ -1,4 +1,4 @@
-package com.mindconsole.blindreader1
+package com.mindconsole.blindreader
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

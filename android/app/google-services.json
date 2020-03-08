@@ -8,6 +8,35 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:24754004045:android:17263a44846a405fa0fc04",
+        "android_client_info": {
+          "package_name": "com.mindconsole.blindreader"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "24754004045-vctti67pqdc2mbglh3nqulj1b010uj5t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOgbgAnAd3Z6aukYd6ah0My988zsZvoAc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "24754004045-vctti67pqdc2mbglh3nqulj1b010uj5t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:24754004045:android:d4a40986d8c51566a0fc04",
         "android_client_info": {
           "package_name": "com.mindconsole.blindreader1"
