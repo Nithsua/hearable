@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:blindreader1/insection.dart';
-import 'package:blindreader1/provider.dart';
+import 'package:blindreader/insection.dart';
+import 'package:blindreader/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 
@@ -30,8 +30,8 @@ class HomePageState extends State<HomePage> {
     super.initState();
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: Colors.blue,
-        // statusBarIconBrightness: Brightness.dark,
+        statusBarColor: Colors.grey[50],
+        statusBarIconBrightness: Brightness.dark,
       ),
     );
     flutterTts = FlutterTts();
@@ -74,361 +74,419 @@ class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Blind Reader',
-          style: TextStyle(
-              // color: Colors.black,
-              // fontWeight: FontWeight.bold,
+      // appBar: AppBar(
+      //   backgroundColor: Colors.white,
+      //   elevation: 0.0,
+      //   title: Text(
+      //     'Blind Reader',
+      //     style: TextStyle(
+      //       color: Colors.black,
+      //       // fontWeight: FontWeight.bold,
+      //     ),
+      //   ),
+      //   centerTitle: true,
+      // ),
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Text(
+                'Blind Reader',
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-        ),
-        // centerTitle: true,
-      ),
-      body: FutureBuilder(
-        future: getData(),
-        builder: (context, snap) {
-          if (snap.connectionState == ConnectionState.done) {
-            var quakeList = snap.data;
-            return ListView(
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              // mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: 10.0,
-                    left: 10.0,
-                  ),
-                  child: Text(
-                    'Programming',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20.0,
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
-                  height: 170,
-                  // width: 75,
-                  child: Center(
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      itemCount: findCategoryLength(quakeList, 'Programming'),
-                      itemBuilder: (context, position) {
-                        // var cardTemp = _getTileValue(
-                        //     filterCategory(quakeList, 'Programming'), position);
-                        // print(cardTemp['imageurl']);
-                        // print(findCategoryLength(quakeList, 'Programming'));
-                        return FutureBuilder(
-                          future: _getTileValue(
-                              filterCategory(quakeList, 'Programming'),
-                              position),
-                          builder: (context, snap) {
-                            if (snap.hasData) {
-                              var temp = snap.data;
+            ),
+            Expanded(
+              child: FutureBuilder(
+                future: getData(),
+                builder: (context, snap) {
+                  if (snap.connectionState == ConnectionState.done) {
+                    var quakeList = snap.data;
+                    return ListView(
+                      // crossAxisAlignment: CrossAxisAlignment.center,
+                      // mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        // Padding(
+                        //   padding: EdgeInsets.only(
+                        //     top: 10.0,
+                        //     left: 10.0,
+                        //   ),
+                        //   child: Text(
+                        //     'Programming',
+                        //     style: TextStyle(
+                        //       fontWeight: FontWeight.w600,
+                        //       fontSize: 20.0,
+                        //     ),
+                        //   ),
+                        // ),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
+                          height: 170,
+                          // width: 75,
+                          child: Center(
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount:
+                                  findCategoryLength(quakeList, 'Programming'),
+                              itemBuilder: (context, position) {
+                                // var cardTemp = _getTileValue(
+                                //     filterCategory(quakeList, 'Programming'), position);
+                                // print(cardTemp['imageurl']);
+                                // print(findCategoryLength(quakeList, 'Programming'));
+                                return FutureBuilder(
+                                  future: _getTileValue(
+                                      filterCategory(quakeList, 'Programming'),
+                                      position),
+                                  builder: (context, snap) {
+                                    if (snap.hasData) {
+                                      var temp = snap.data;
 
-                              return Padding(
-                                padding: EdgeInsets.all(5.0),
-                                child: Card(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: InkWell(
-                                    onLongPress: () {
-                                      flutterTts
-                                          .speak('Opening ' + temp['title']);
-                                      Navigator.push(
-                                        context,
-                                        // PageTransition(
-                                        //     child: ChapterSection(
-                                        //       temp['chapters'],
-                                        //     ),
-                                        //     type: PageTransitionType.rightToLeftWithFade),
-                                        MaterialPageRoute(
-                                          builder: (context) => ChapterSection(
-                                            temp['chapters'],
+                                      return Padding(
+                                        padding: EdgeInsets.all(5.0),
+                                        child: Card(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
                                           ),
-                                        ),
-                                      );
-                                    },
-                                    onTap: () {
-                                      print(temp['title']);
-                                      flutterTts.speak(temp['title']);
-                                    },
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    child: Padding(
-                                      padding: EdgeInsets.all(5.0),
-                                      child: Image.network(
-                                        temp['imageurl'],
-                                        loadingBuilder:
-                                            (context, child, loadingProgress) {
-                                          if (loadingProgress == null)
-                                            return child;
-                                          return Container(
-                                            width: 80,
-                                          );
-                                        },
-                                        width: 80,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            } else {
-                              return Container();
-                            }
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: 10.0,
-                    left: 10.0,
-                  ),
-                  child: Text(
-                    'Theories',
-                    style:
-                        TextStyle(fontWeight: FontWeight.w600, fontSize: 20.0),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
-                  height: 170,
-                  // width: 75,
-                  child: Center(
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      itemCount: findCategoryLength(quakeList, 'Theories'),
-                      itemBuilder: (context, position) {
-                        // var cardTemp = _getTileValue(
-                        //     filterCategory(quakeList, 'Programming'), position);
-                        // print(cardTemp['imageurl']);
-                        // print(findCategoryLength(quakeList, 'Programming'));
-                        return FutureBuilder(
-                          future: _getTileValue(
-                              filterCategory(quakeList, 'Theories'), position),
-                          builder: (context, snap) {
-                            if (snap.hasData) {
-                              var temp = snap.data;
-
-                              return Padding(
-                                padding: EdgeInsets.all(5.0),
-                                child: Card(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: InkWell(
-                                    onLongPress: () {
-                                      flutterTts
-                                          .speak('Opening ' + temp['title']);
-                                      Navigator.push(
-                                        context,
-                                        // PageTransition(
-                                        //     child: ChapterSection(
-                                        //       temp['chapters'],
-                                        //     ),
-                                        //     type: PageTransitionType.rightToLeftWithFade),
-                                        MaterialPageRoute(
-                                          builder: (context) => ChapterSection(
-                                            temp['chapters'],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    onTap: () {
-                                      print(temp['title']);
-                                      flutterTts.speak(temp['title']);
-                                    },
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    child: Padding(
-                                      padding: EdgeInsets.all(5.0),
-                                      child: Image.network(
-                                        temp['imageurl'],
-                                        loadingBuilder:
-                                            (context, child, loadingProgress) {
-                                          if (loadingProgress == null)
-                                            return child;
-                                          return Container(
-                                            width: 80,
-                                          );
-                                        },
-                                        width: 80,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            } else {
-                              return Container();
-                            }
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: 10.0,
-                    left: 10.0,
-                  ),
-                  child: Text(
-                    'Popular Ones',
-                    style:
-                        TextStyle(fontWeight: FontWeight.w600, fontSize: 20.0),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 10.0),
-                  child: Center(
-                    child: ListView.builder(
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: findCategoryLength(quakeList, 'Popular'),
-                      shrinkWrap: true,
-                      itemBuilder: (context, position) {
-                        // Future<String> temp = getImage(position);
-                        return FutureBuilder(
-                          future: _getTileValue(
-                              filterCategory(quakeList, 'Popular'), position),
-                          builder: (context, snap) {
-                            if (snap.connectionState ==
-                                ConnectionState.waiting) {
-                              // return Align(
-                              //   child: Padding(
-                              //       padding: EdgeInsets.all(20.0),
-                              //       child: CircularProgressIndicator()),
-                              // );
-                              return Container();
-                            } else {
-                              var temp = snap.data;
-                              return Padding(
-                                padding:
-                                    EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
-                                child: Card(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    onTap: () {
-                                      print(temp['title']);
-                                      flutterTts.speak(temp['title']);
-                                    },
-                                    onLongPress: () {
-                                      flutterTts
-                                          .speak('Opening ' + temp['title']);
-                                      Navigator.push(
-                                        context,
-                                        // PageTransition(
-                                        //     child: ChapterSection(
-                                        //       temp['chapters'],
-                                        //     ),
-                                        //     type: PageTransitionType.rightToLeftWithFade),
-                                        MaterialPageRoute(
-                                          builder: (context) => ChapterSection(
-                                            temp['chapters'],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    child: Padding(
-                                      padding: EdgeInsets.all(10.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: <Widget>[
-                                          Card(
-                                            margin: EdgeInsets.all(10.0),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
-                                            ),
-                                            child: Container(
+                                          child: InkWell(
+                                            onLongPress: () {
+                                              flutterTts.speak(
+                                                  'Opening ' + temp['title']);
+                                              Navigator.push(
+                                                context,
+                                                // PageTransition(
+                                                //     child: ChapterSection(
+                                                //       temp['chapters'],
+                                                //     ),
+                                                //     type: PageTransitionType.rightToLeftWithFade),
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ChapterSection(
+                                                    temp['chapters'],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            onTap: () {
+                                              print(temp['title']);
+                                              flutterTts.speak(temp['title']);
+                                            },
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            child: Padding(
                                               padding: EdgeInsets.all(5.0),
-                                              height: 125,
-                                              width: 90,
                                               child: Image.network(
                                                 temp['imageurl'],
                                                 loadingBuilder: (context, child,
                                                     loadingProgress) {
                                                   if (loadingProgress == null)
                                                     return child;
-                                                  return Align(
-                                                    alignment: Alignment.center,
-                                                    child:
-                                                        CircularProgressIndicator(),
+                                                  return Container(
+                                                    child: Align(
+                                                      widthFactor: 2.0,
+                                                      child:
+                                                          CircularProgressIndicator(),
+                                                    ),
+                                                    // width: 80,
                                                   );
                                                 },
-                                                // height: 100,
-                                                // width: 75,
-                                                fit: BoxFit.fitWidth,
+                                                width: 80,
                                               ),
                                             ),
                                           ),
-                                          // onTap: () {},
-                                          Flexible(
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                // fit: FlexFit.loose,
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      10.0, 5.0, 10.0, 10.0),
-                                                  child: Text(
-                                                    temp['title'],
-                                                    // overflow: TextOverflow.,
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 20.0,
-                                                    ),
-                                                    // textAlign:
-                                                    //     TextAlign.justify,
-                                                  ),
-                                                ),
+                                        ),
+                                      );
+                                    } else {
+                                      return Container();
+                                    }
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        // Padding(
+                        //   padding: EdgeInsets.only(
+                        //     top: 10.0,
+                        //     left: 10.0,
+                        //   ),
+                        //   child: Text(
+                        //     'Theories',
+                        //     style:
+                        //         TextStyle(fontWeight: FontWeight.w600, fontSize: 20.0),
+                        //   ),
+                        // ),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(10.0, 10.0, 10.0, 0.0),
+                          height: 170,
+                          // width: 75,
+                          child: Center(
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              itemCount:
+                                  findCategoryLength(quakeList, 'Theories'),
+                              itemBuilder: (context, position) {
+                                // var cardTemp = _getTileValue(
+                                //     filterCategory(quakeList, 'Programming'), position);
+                                // print(cardTemp['imageurl']);
+                                // print(findCategoryLength(quakeList, 'Programming'));
+                                return FutureBuilder(
+                                  future: _getTileValue(
+                                      filterCategory(quakeList, 'Theories'),
+                                      position),
+                                  builder: (context, snap) {
+                                    if (snap.hasData) {
+                                      var temp = snap.data;
 
-                                                Padding(
-                                                  padding: EdgeInsets.fromLTRB(
-                                                      10.0, 5.0, 10.0, 10.0),
-                                                  child: Text(
-                                                    temp['subtitle'],
-                                                    textAlign:
-                                                        TextAlign.justify,
+                                      return Padding(
+                                        padding: EdgeInsets.all(5.0),
+                                        child: Card(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                          ),
+                                          child: InkWell(
+                                            onLongPress: () {
+                                              flutterTts.speak(
+                                                  'Opening ' + temp['title']);
+                                              Navigator.push(
+                                                context,
+                                                // PageTransition(
+                                                //     child: ChapterSection(
+                                                //       temp['chapters'],
+                                                //     ),
+                                                //     type: PageTransitionType.rightToLeftWithFade),
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ChapterSection(
+                                                    temp['chapters'],
                                                   ),
                                                 ),
-                                              ],
+                                              );
+                                            },
+                                            onTap: () {
+                                              print(temp['title']);
+                                              flutterTts.speak(temp['title']);
+                                            },
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
+                                            child: Padding(
+                                              padding: EdgeInsets.all(5.0),
+                                              child: Image.network(
+                                                temp['imageurl'],
+                                                loadingBuilder: (context, child,
+                                                    loadingProgress) {
+                                                  if (loadingProgress == null)
+                                                    return child;
+                                                  return Container(
+                                                    width: 80,
+                                                  );
+                                                },
+                                                width: 80,
+                                              ),
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            );
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
+                                        ),
+                                      );
+                                    } else {
+                                      return Container();
+                                    }
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                        // Padding(
+                        //   padding: EdgeInsets.only(
+                        //     top: 10.0,
+                        //     left: 10.0,
+                        //   ),
+                        //   child: Text(
+                        //     'Popular Ones',
+                        //     style:
+                        //         TextStyle(fontWeight: FontWeight.w600, fontSize: 20.0),
+                        //   ),
+                        // ),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 10.0),
+                          child: Center(
+                            child: ListView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount:
+                                  findCategoryLength(quakeList, 'Popular'),
+                              shrinkWrap: true,
+                              itemBuilder: (context, position) {
+                                // Future<String> temp = getImage(position);
+                                return FutureBuilder(
+                                  future: _getTileValue(
+                                      filterCategory(quakeList, 'Popular'),
+                                      position),
+                                  builder: (context, snap) {
+                                    if (snap.connectionState ==
+                                        ConnectionState.waiting) {
+                                      // return Align(
+                                      //   child: Padding(
+                                      //       padding: EdgeInsets.all(20.0),
+                                      //       child: CircularProgressIndicator()),
+                                      // );
+                                      return Container();
+                                    } else {
+                                      var temp = snap.data;
+                                      return Padding(
+                                        padding: EdgeInsets.fromLTRB(
+                                            10.0, 10.0, 10.0, 0.0),
+                                        child: Card(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                          ),
+                                          child: InkWell(
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                            onTap: () {
+                                              print(temp['title']);
+                                              flutterTts.speak(temp['title']);
+                                            },
+                                            onLongPress: () {
+                                              flutterTts.speak(
+                                                  'Opening ' + temp['title']);
+                                              Navigator.push(
+                                                context,
+                                                // PageTransition(
+                                                //     child: ChapterSection(
+                                                //       temp['chapters'],
+                                                //     ),
+                                                //     type: PageTransitionType.rightToLeftWithFade),
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ChapterSection(
+                                                    temp['chapters'],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: Padding(
+                                              padding: EdgeInsets.all(10.0),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                children: <Widget>[
+                                                  Card(
+                                                    margin:
+                                                        EdgeInsets.all(10.0),
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                    ),
+                                                    child: Container(
+                                                      padding:
+                                                          EdgeInsets.all(5.0),
+                                                      height: 125,
+                                                      width: 90,
+                                                      child: Image.network(
+                                                        temp['imageurl'],
+                                                        loadingBuilder: (context,
+                                                            child,
+                                                            loadingProgress) {
+                                                          if (loadingProgress ==
+                                                              null)
+                                                            return child;
+                                                          return Align(
+                                                            alignment: Alignment
+                                                                .center,
+                                                            child:
+                                                                CircularProgressIndicator(),
+                                                          );
+                                                        },
+                                                        // height: 100,
+                                                        // width: 75,
+                                                        fit: BoxFit.fitWidth,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  // onTap: () {},
+                                                  Flexible(
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: <Widget>[
+                                                        // fit: FlexFit.loose,
+                                                        Padding(
+                                                          padding: EdgeInsets
+                                                              .fromLTRB(
+                                                                  10.0,
+                                                                  5.0,
+                                                                  10.0,
+                                                                  10.0),
+                                                          child: Text(
+                                                            temp['title'],
+                                                            // overflow: TextOverflow.,
+                                                            style: TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              fontSize: 20.0,
+                                                            ),
+                                                            // textAlign:
+                                                            //     TextAlign.justify,
+                                                          ),
+                                                        ),
+
+                                                        Padding(
+                                                          padding: EdgeInsets
+                                                              .fromLTRB(
+                                                                  10.0,
+                                                                  5.0,
+                                                                  10.0,
+                                                                  10.0),
+                                                          child: Text(
+                                                            temp['subtitle'],
+                                                            textAlign: TextAlign
+                                                                .justify,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  } else {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

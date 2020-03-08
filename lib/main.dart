@@ -1,4 +1,4 @@
-import 'package:blindreader1/homepage.dart';
+import 'package:blindreader/homepage.dart';
 // import 'package:blindreader1/splash.dart';
 
 import 'package:flutter/material.dart';
