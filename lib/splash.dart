@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
 
-import 'package:blindreader1/homepage.dart';
+import 'package:blindreader/homepage.dart';
 
 class SplashPage extends StatefulWidget {
   @override
