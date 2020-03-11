@@ -15,8 +15,6 @@ readerData() async {
   return await FirebaseStorageService.getData(temp);
 }
 
-// enum TtsState { playing, stopped }
-
 class ReaderPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => ReaderPageState();
@@ -28,7 +26,6 @@ class ReaderPage extends StatefulWidget {
 
 class ReaderPageState extends State<ReaderPage> {
   FlutterTts flutterTts = FlutterTts();
-  // TtsState ttsState = TtsState.stopped;
   @override
   initState() {
     super.initState();
@@ -119,9 +116,7 @@ class ReaderPageState extends State<ReaderPage> {
                                 readerPosition = 0;
                                 playerIcon = Icons.pause;
                               });
-
                               flutterTts.speak(tmp[readerPosition]['content']);
-
                               sleep(Duration(seconds: 1));
                             },
                             child: GestureDetector(
@@ -145,7 +140,6 @@ class ReaderPageState extends State<ReaderPage> {
                                 if (readerPosition > 0) --readerPosition;
                                 playerIcon = Icons.pause;
                               });
-
                               flutterTts.speak(tmp[readerPosition]['content']);
                             },
                             child: GestureDetector(
@@ -173,11 +167,9 @@ class ReaderPageState extends State<ReaderPage> {
                                   playerIcon = Icons.pause;
                                   // ttsState = TtsState.playing;
                                 });
-
                                 await flutterTts
                                     .speak(tmp[readerPosition]['content']);
                                 // sleep(Duration(seconds: 1));
-
                               } else if (playerIcon == Icons.pause) {
                                 var result = await flutterTts.stop();
                                 if (result == 1) {
@@ -210,9 +202,7 @@ class ReaderPageState extends State<ReaderPage> {
                                   ++readerPosition;
                                 playerIcon = Icons.pause;
                               });
-
                               flutterTts.speak(tmp[readerPosition]['content']);
-
                               sleep(Duration(seconds: 1));
                             },
                             child: GestureDetector(
@@ -264,7 +254,7 @@ class ReaderPageState extends State<ReaderPage> {
                     child: Icon(
                       Icons.arrow_back,
                       color: Colors.white,
-                      size: 35.0,
+                      // size: 35.0,
                     ),
                   ),
                 ),

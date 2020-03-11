@@ -187,7 +187,7 @@ class HomePageState extends State<HomePage> {
                                                     return child;
                                                   return Container(
                                                     child: Align(
-                                                      widthFactor: 2.0,
+                                                      // widthFactor: 2.0,
                                                       child:
                                                           CircularProgressIndicator(),
                                                     ),
