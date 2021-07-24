@@ -1,4 +1,4 @@
-# blindreader
+# Hearable
 Basic Implementation of Ebook Reader in flutter for visually impaired
 
 ## Getting Started
